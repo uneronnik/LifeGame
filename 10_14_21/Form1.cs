@@ -29,19 +29,22 @@ namespace _10_14_21
         }
         private void StartGame()
         {
-            if (timer1.Enabled)
-                return;
-            currentGeneration = 0;
-            resolutionNum.Enabled = false;
-            densityNum.Enabled = false;
-            resolution = (int)resolutionNum.Value;
-            rows = pictureBox1.Height / resolution;
-            colums = pictureBox1.Width / resolution;
-            field = new bool[colums, rows];
-            RandomizeField();
+            if (currentGeneration == 0)
+            {
+                if (timer1.Enabled)
+                    return;
+                currentGeneration = 0;
+                resolutionNum.Enabled = false;
+                densityNum.Enabled = false;
+                resolution = (int)resolutionNum.Value;
+                rows = pictureBox1.Height / resolution;
+                colums = pictureBox1.Width / resolution;
+                field = new bool[colums, rows];
+                RandomizeField();
 
-            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            graphics = Graphics.FromImage(pictureBox1.Image);
+                pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+                graphics = Graphics.FromImage(pictureBox1.Image);
+            }
             timer1.Start();
             UpdateField();
         }
@@ -73,8 +76,10 @@ namespace _10_14_21
                     {
                         newField[x, y] = field[x, y];
                     }
-                    if (hasLife)
-                        graphics.FillRectangle(Brushes.Crimson, x * resolution, y * resolution, resolution, resolution);
+                    if (newField[x,y])
+                        FillCell(x, y, false);
+                    if(borderRadioButton1.Checked)
+                        FillCell(x, y, true);
                 }
             }
             field = newField;
@@ -101,17 +106,30 @@ namespace _10_14_21
         }
         private void UpdateField()
         {
-
+            graphics.Clear(Color.Black);
             for (int x = 0; x < colums; x++)
             {
                 for (int y = 0; y < rows; y++)
                 {
                     if (field[x, y])
-                        graphics.FillRectangle(Brushes.Crimson, x * resolution, y * resolution, resolution, resolution);
+                    {
+                        FillCell(x, y, false);
+                    }
+                    if(borderRadioButton1.Checked)
+                        FillCell(x, y, true);
                 }
             }
             pictureBox1.Refresh();
 
+        }
+        private void FillCell(int x, int y, bool drawOnlyBorder)
+        {
+            Rectangle rectangle = new Rectangle(x * resolution, y * resolution, resolution, resolution);
+            if (!drawOnlyBorder)
+            {
+                graphics.FillRectangle(Brushes.Crimson, rectangle);
+            }
+            ControlPaint.DrawBorder(graphics, rectangle ,Color.DarkGray, ButtonBorderStyle.Solid);
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -145,8 +163,6 @@ namespace _10_14_21
         }
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!timer1.Enabled)
-                return;
             if (e.Button == MouseButtons.Left)
             {
                 var x = e.Location.X / resolution;
@@ -154,7 +170,7 @@ namespace _10_14_21
                 var validationPassed = ValidateMousePosition(x, y);
                 if(validationPassed)
                     field[x, y] = true;
-                
+                UpdateField();
             }
             if (e.Button == MouseButtons.Right)
             {
@@ -164,6 +180,7 @@ namespace _10_14_21
                 var validationPassed = ValidateMousePosition(x, y);
                 if (validationPassed)
                     field[x, y] = false;
+                UpdateField();
             }
         }
         private bool ValidateMousePosition(int x, int y)
