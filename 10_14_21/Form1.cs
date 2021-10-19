@@ -13,38 +13,27 @@ namespace _10_14_21
 
     public partial class Form1 : Form
     {
-        private int currentGeneration = 0;
+        
         private Graphics graphics;
+        private GameEngine gameEngine;
         private int resolution;
-        private bool[,] field;
-        private int rows;
-        private int colums;
+        
         public Form1()
         {
             InitializeComponent();
         }
-        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
         private void StartGame()
         {
-            if (currentGeneration == 0)
+            if (gameEngine == null)
             {
-                if (timer1.Enabled)
-                    return;
-                currentGeneration = 0;
-                resolutionNum.Enabled = false;
-                densityNum.Enabled = false;
                 resolution = (int)resolutionNum.Value;
-                rows = pictureBox1.Height / resolution;
-                colums = pictureBox1.Width / resolution;
-                field = new bool[colums, rows];
-                RandomizeField();
-
-                pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-                graphics = Graphics.FromImage(pictureBox1.Image);
+                int rows = pictureBox1.Height / resolution;
+                int colums = pictureBox1.Width / resolution;
+                gameEngine = new GameEngine(rows, colums, (int)densityNum.Value);
             }
+
+            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            graphics = Graphics.FromImage(pictureBox1.Image);
             timer1.Start();
             UpdateField();
         }
@@ -53,65 +42,15 @@ namespace _10_14_21
         {
             StartGame();
         }
-        private void NextGeneration()
-        {
-            graphics.Clear(Color.Black);
-            var newField = new bool[colums, rows];
-
-            for (int x = 0; x < colums; x++)
-            {
-                for (int y = 0; y < rows; y++)
-                {
-                    var neighboursCount = CountNeighbours(x, y);
-                    var hasLife = field[x, y];
-                    if (!hasLife && neighboursCount == 3)
-                    {
-                        newField[x, y] = true;
-                    }
-                    else if (hasLife && (neighboursCount < 2 || neighboursCount > 3))
-                    {
-                        newField[x, y] = false;
-                    }
-                    else
-                    {
-                        newField[x, y] = field[x, y];
-                    }
-                    if (newField[x,y])
-                        FillCell(x, y, false);
-                    if(borderRadioButton1.Checked)
-                        FillCell(x, y, true);
-                }
-            }
-            field = newField;
-            pictureBox1.Refresh();
-            currentGeneration++;
-
-        }
-        private int CountNeighbours(int x, int y)
-        {
-            int count = 0;
-            for (int i = -1; i < 2; i++)
-                for (int j = -1; j < 2; j++)
-                {
-                    var col = (x + j + colums) % colums;
-                    var row = (y + i + rows) % rows;
-
-                    var isSelfCheking = col == x && row == y;
-                    var hasLife = field[col, row];
-                    if (hasLife && !isSelfCheking)
-                        count++;
-                }
-
-            return count;
-        }
+        
         private void UpdateField()
         {
             graphics.Clear(Color.Black);
-            for (int x = 0; x < colums; x++)
+            for (int x = 0; x < gameEngine.Colums; x++)
             {
-                for (int y = 0; y < rows; y++)
+                for (int y = 0; y < gameEngine.Rows; y++)
                 {
-                    if (field[x, y])
+                    if (gameEngine.Field[x, y])
                     {
                         FillCell(x, y, false);
                     }
@@ -133,19 +72,9 @@ namespace _10_14_21
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            NextGeneration();
-            Text = $"Generation: {currentGeneration}";
-        }
-        private void RandomizeField()
-        {
-            Random random = new Random();
-            for (int x = 0; x < colums; x++)
-            {
-                for (int y = 0; y < rows; y++)
-                {
-                    field[x, y] = random.Next((int)densityNum.Value) == 0;
-                }
-            }
+            gameEngine.NextGeneration();
+            UpdateField();
+            Text = $"Generation: {gameEngine.CurrentGeneration}";
         }
         private void StopGame()
         {
@@ -168,24 +97,23 @@ namespace _10_14_21
                 var x = e.Location.X / resolution;
                 var y = e.Location.Y / resolution;
                 var validationPassed = ValidateMousePosition(x, y);
-                if(validationPassed)
-                    field[x, y] = true;
+                if (validationPassed)
+                    gameEngine.SetCellState(x, y, true);
                 UpdateField();
             }
             if (e.Button == MouseButtons.Right)
             {
                 var x = e.Location.X / resolution;
-                var y = e.Location.Y /
-    resolution;
+                var y = e.Location.Y / resolution;
                 var validationPassed = ValidateMousePosition(x, y);
                 if (validationPassed)
-                    field[x, y] = false;
+                    gameEngine.SetCellState(x, y, true);
                 UpdateField();
             }
         }
         private bool ValidateMousePosition(int x, int y)
         {
-            return x >= 0 && y >= 0 && x < colums && y < rows;
+            return x >= 0 && y >= 0 && x < gameEngine.Colums && y < gameEngine.Rows;
         }
     }
     

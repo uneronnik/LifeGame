@@ -36,11 +36,11 @@
             this.densityNum = new System.Windows.Forms.NumericUpDown();
             this.resolutionNum = new System.Windows.Forms.NumericUpDown();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.borderRadioButton2 = new System.Windows.Forms.RadioButton();
+            this.borderRadioButton1 = new System.Windows.Forms.RadioButton();
             this.labelResolution = new System.Windows.Forms.Label();
             this.labelDensity = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.borderRadioButton1 = new System.Windows.Forms.RadioButton();
-            this.borderRadioButton2 = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.densityNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.resolutionNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -140,7 +140,6 @@
             this.splitContainer1.Panel1.Controls.Add(this.densityNum);
             this.splitContainer1.Panel1.Controls.Add(this.stopButton);
             this.splitContainer1.Panel1.Controls.Add(this.label2);
-            this.splitContainer1.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer1_Panel1_Paint);
             // 
             // splitContainer1.Panel2
             // 
@@ -150,6 +149,29 @@
             this.splitContainer1.SplitterDistance = 352;
             this.splitContainer1.SplitterWidth = 8;
             this.splitContainer1.TabIndex = 8;
+            // 
+            // borderRadioButton2
+            // 
+            this.borderRadioButton2.AutoSize = true;
+            this.borderRadioButton2.Checked = true;
+            this.borderRadioButton2.Location = new System.Drawing.Point(6, 416);
+            this.borderRadioButton2.Name = "borderRadioButton2";
+            this.borderRadioButton2.Size = new System.Drawing.Size(346, 29);
+            this.borderRadioButton2.TabIndex = 11;
+            this.borderRadioButton2.TabStop = true;
+            this.borderRadioButton2.Text = "Обвести только живые клетки";
+            this.borderRadioButton2.UseVisualStyleBackColor = true;
+            // 
+            // borderRadioButton1
+            // 
+            this.borderRadioButton1.AutoSize = true;
+            this.borderRadioButton1.Location = new System.Drawing.Point(3, 366);
+            this.borderRadioButton1.Name = "borderRadioButton1";
+            this.borderRadioButton1.Size = new System.Drawing.Size(241, 29);
+            this.borderRadioButton1.TabIndex = 10;
+            this.borderRadioButton1.TabStop = true;
+            this.borderRadioButton1.Text = "Обвести все клетки";
+            this.borderRadioButton1.UseVisualStyleBackColor = true;
             // 
             // labelResolution
             // 
@@ -184,29 +206,6 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
-            // 
-            // borderRadioButton1
-            // 
-            this.borderRadioButton1.AutoSize = true;
-            this.borderRadioButton1.Location = new System.Drawing.Point(3, 366);
-            this.borderRadioButton1.Name = "borderRadioButton1";
-            this.borderRadioButton1.Size = new System.Drawing.Size(241, 29);
-            this.borderRadioButton1.TabIndex = 10;
-            this.borderRadioButton1.TabStop = true;
-            this.borderRadioButton1.Text = "Обвести все клетки";
-            this.borderRadioButton1.UseVisualStyleBackColor = true;
-            // 
-            // borderRadioButton2
-            // 
-            this.borderRadioButton2.AutoSize = true;
-            this.borderRadioButton2.Checked = true;
-            this.borderRadioButton2.Location = new System.Drawing.Point(6, 416);
-            this.borderRadioButton2.Name = "borderRadioButton2";
-            this.borderRadioButton2.Size = new System.Drawing.Size(346, 29);
-            this.borderRadioButton2.TabIndex = 11;
-            this.borderRadioButton2.TabStop = true;
-            this.borderRadioButton2.Text = "Обвести только живые клетки";
-            this.borderRadioButton2.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
