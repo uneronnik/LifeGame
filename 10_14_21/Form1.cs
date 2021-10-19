@@ -52,23 +52,29 @@ namespace _10_14_21
                 {
                     if (gameEngine.Field[x, y])
                     {
-                        FillCell(x, y, false);
+                        FillCell(x, y);
+                        if(borderRadioButton2.Checked) // Оювести только живые клетки
+                            DrawBorder(x, y);
                     }
-                    if(borderRadioButton1.Checked)
-                        FillCell(x, y, true);
+                    if(borderRadioButton1.Checked) // Обвести все клетки
+                        DrawBorder(x, y);
                 }
             }
             pictureBox1.Refresh();
 
         }
-        private void FillCell(int x, int y, bool drawOnlyBorder)
+        private void FillCell(int x, int y)
         {
             Rectangle rectangle = new Rectangle(x * resolution, y * resolution, resolution, resolution);
-            if (!drawOnlyBorder)
-            {
-                graphics.FillRectangle(Brushes.Crimson, rectangle);
-            }
-            ControlPaint.DrawBorder(graphics, rectangle ,Color.DarkGray, ButtonBorderStyle.Solid);
+            
+            graphics.FillRectangle(Brushes.Crimson, rectangle);
+            
+            
+        }
+        private void DrawBorder(int x, int y)
+        {
+            Rectangle rectangle = new Rectangle(x * resolution, y * resolution, resolution, resolution);
+            ControlPaint.DrawBorder(graphics, rectangle, Color.DarkGray, ButtonBorderStyle.Solid);
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
